@@ -252,29 +252,102 @@
 //     println!("{}", result);
 // }
 
-// ******************************************************************
-// generic type parameters, trait bounds and lifetime in one function
-// ******************************************************************
+// // ******************************************************************
+// // generic type parameters, trait bounds and lifetime in one function
+// // ******************************************************************
 
-fn main() {
-    let string1 = String::from("abcd");
-    let string2 = "xyz";
+// fn main() {
+//     let string1 = String::from("abcd");
+//     let string2 = "xyz";
 
-    let result =
-        longest_with_an_announcement(string1.as_str(), string2, "Today is someone's birthday!");
-    println!("The Longest string is {}", result);
+//     let result =
+//         longest_with_an_announcement(string1.as_str(), string2, "Today is someone's birthday!");
+//     println!("The Longest string is {}", result);
+// }
+
+// use std::fmt::Display;
+
+// fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
+// where
+//     T: Display,
+// {
+//     println!("Announcement! {}", ann);
+//     if x.len() > y.len() {
+//         x
+//     } else {
+//         y
+//     }
+// }
+
+// *************
+// trait objects
+// *************
+
+pub struct Screen {
+    pub components: Vec<Box<dyn Draw>>, // this is a trait object
 }
 
-use std::fmt::Display;
+// without trait objects, Screen would be like this, in which case,
+// the components would need to be of the same one type T.
+// pub struct Screen<T: Draw> {
+//     pub components: Vec<T>,
+// }
 
-fn longest_with_an_announcement<'a, T>(x: &'a str, y: &'a str, ann: T) -> &'a str
-where
-    T: Display,
-{
-    println!("Announcement! {}", ann);
-    if x.len() > y.len() {
-        x
-    } else {
-        y
+impl Screen {
+    pub fn run(&self) {
+        for component in self.components.iter() {
+            component.draw();
+        }
     }
+}
+
+pub trait Draw {
+    fn draw(&self);
+}
+
+pub struct Button {
+    pub width: u32,
+    pub height: u32,
+    pub label: String,
+}
+
+impl Draw for Button {
+    fn draw(&self) {
+        println!("This is a Button.")
+    }
+}
+
+struct SelectBox {
+    width: u32,
+    height: u32,
+    options: Vec<String>,
+}
+
+impl Draw for SelectBox {
+    fn draw(&self) {
+        println!("This is a SelectBox.")
+    }
+}
+
+fn main() {
+    let screen = Screen {
+        components: vec![
+            Box::new(SelectBox {
+                width: 75,
+                height: 10,
+                options: vec![
+                    String::from("Yes"),
+                    String::from("Maybe"),
+                    String::from("No"),
+                ],
+            }),
+            Box::new(Button {
+                width: 50,
+                height: 10,
+                label: String::from("OK"),
+            }),
+        ],
+    };
+
+    screen.run();
 }
