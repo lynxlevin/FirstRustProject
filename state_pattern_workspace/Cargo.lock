@@ -11,28 +11,4 @@ name = "blog_main"
 version = "0.1.0"
 dependencies = [
  "blog",
- "draft",
-]
-
-[[package]]
-name = "draft"
-version = "0.1.0"
-dependencies = [
- "blog",
- "pending-review",
-]
-
-[[package]]
-name = "pending-review"
-version = "0.1.0"
-dependencies = [
- "blog",
- "published",
-]
-
-[[package]]
-name = "published"
-version = "0.1.0"
-dependencies = [
- "blog",
 ]
