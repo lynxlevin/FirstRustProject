@@ -3,4 +3,7 @@
 members = [
   "blog_main",
   "blog",
+  "draft",
+  "pending-review",
+  "published",
 ]

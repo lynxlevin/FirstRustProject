@@ -1,5 +1,5 @@
 [package]
-name = "blog_main"
+name = "draft"
 version = "0.1.0"
 edition = "2021"
 
@@ -7,4 +7,4 @@ edition = "2021"
 
 [dependencies]
 blog = { path = "../blog" }
-draft = { path = "../draft" }
+pending-review = { path = "../pending-review" }

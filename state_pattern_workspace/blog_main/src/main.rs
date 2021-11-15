@@ -1,7 +1,8 @@
+use draft::Draft;
 use blog::Post;
 
 fn main() {
-    let mut post = Post::new();
+    let mut post = Post::new(Some(Box::new(Draft {})));
 
     post.add_text("I ate a salad for lunch today");
     assert_eq!("", post.content());

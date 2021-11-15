@@ -4,9 +4,9 @@ pub struct Post {
 }
 
 impl Post {
-    pub fn new() -> Post {
+    pub fn new(state: Option<Box<dyn State>>) -> Post {
         Post {
-            state: Some(Box::new(Draft {})),
+            state,
             content: String::new(),
         }
     }
@@ -16,12 +16,17 @@ impl Post {
     }
 
     pub fn content(&self) -> &str {
-        self.state.as_ref().unwrap().content(self)
+        if self.state.as_ref().unwrap().can_get_content() {
+            self.content.as_str()
+        } else {
+            ""
+        }
     }
 
-    pub fn state(&self) -> Option<&Box<dyn State>> {
-        self.state.as_ref()
-    }
+    // this fn was used when states were in this file
+    // pub fn content(&self) -> &str {
+    //     self.state.as_ref().unwrap().content(self)
+    // }
 
     pub fn request_review(&mut self) {
         if let Some(s) = self.state.take() {
@@ -39,47 +44,7 @@ impl Post {
 pub trait State {
     fn request_review(self: Box<Self>) -> Box<dyn State>;
     fn approve(self: Box<Self>) -> Box<dyn State>;
-    fn content<'a>(&self, _post: &'a Post) -> &'a str {
-        ""
-    }
-}
-
-struct Draft {}
-
-impl State for Draft {
-    fn request_review(self: Box<Self>) -> Box<dyn State> {
-        Box::new(PendingReview {})
-    }
-
-    fn approve(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-}
-
-struct PendingReview {}
-
-impl State for PendingReview {
-    fn request_review(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-
-    fn approve(self: Box<Self>) -> Box<dyn State> {
-        Box::new(Published {})
-    }
-}
-
-struct Published {}
-
-impl State for Published {
-    fn request_review(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-
-    fn approve(self: Box<Self>) -> Box<dyn State> {
-        self
-    }
-
-    fn content<'a>(&self, post: &'a Post) -> &'a str {
-        &post.content
+    fn can_get_content(&self) -> bool {
+        false
     }
 }
