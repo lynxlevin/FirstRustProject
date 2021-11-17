@@ -159,27 +159,41 @@
 //     }
 // }
 
-// ************************************************************************************
-// match can be used on types other than enums (can use _ which compiler does not warn)
-// ************************************************************************************
+// // ************************************************************************************
+// // match can be used on types other than enums (can use _ which compiler does not warn)
+// // ************************************************************************************
 
-use rand::Rng;
+// use rand::Rng;
+
+// fn main() {
+//     for _ in 1..10 {
+//         let dice_roll = rand::thread_rng().gen_range(1..10);
+//         println!("{}", dice_roll);
+//         match dice_roll {
+//             3 => add_fancy_hat(),
+//             7 => remove_fancy_hat(),
+//             _ => (),
+//         }
+//     }
+
+//     fn add_fancy_hat() {
+//         println!("Fancy hat awarded!");
+//     }
+//     fn remove_fancy_hat() {
+//         println!("You lost a fancy hat.");
+//     }
+// }
+
+// ***********************************
+// Option with match branching on Some
+// ***********************************
 
 fn main() {
-    for _ in 1..10 {
-        let dice_roll = rand::thread_rng().gen_range(1..10);
-        println!("{}", dice_roll);
-        match dice_roll {
-            3 => add_fancy_hat(),
-            7 => remove_fancy_hat(),
-            _ => (),
-        }
-    }
+    let a = Some(10_u32);
 
-    fn add_fancy_hat() {
-        println!("Fancy hat awarded!");
-    }
-    fn remove_fancy_hat() {
-        println!("You lost a fancy hat.");
+    match a {
+        Some(i) if i > 10 => println!("larger than 10"),
+        Some(_i) => println!("smaller or equal to 10"),
+        None => println!("None"),
     }
 }
