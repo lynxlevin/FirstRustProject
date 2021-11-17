@@ -184,16 +184,33 @@
 //     }
 // }
 
-// ***********************************
-// Option with match branching on Some
-// ***********************************
+// ***************************************************************
+// [using the content of Some] Option with match branching on Some
+// ***************************************************************
 
 fn main() {
     let a = Some(10_u32);
 
     match a {
         Some(i) if i > 10 => println!("larger than 10"),
-        Some(_i) => println!("smaller or equal to 10"),
+        Some(i) => small(i),
         None => println!("None"),
+    }
+
+    if let Some(i) = a {
+        println!("{}", i);
+    }
+    println!("{}", a.unwrap());
+
+    let b = Some(5_u32);
+
+    match b {
+        Some(i) if i > 10 => println!("larger than 10"),
+        Some(i) => small(i),
+        None => println!("None"),
+    }
+
+    fn small(number_in_some: u32) {
+        println!("b = {}", number_in_some);
     }
 }
