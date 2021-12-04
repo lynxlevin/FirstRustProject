@@ -34,7 +34,6 @@
 //     println!("The result is {}", result);
 // }
 
-
 // fn main() {
 //     let mut counter = 0;
 
@@ -91,9 +90,20 @@
 //     }
 // }
 
+// fn main() {
+//     for number in (1..4).rev() {
+//         println!("{}", number);
+//     }
+//     println!("LISTOFF!!!");
+// }
+
 fn main() {
-    for number in (1..4).rev() {
+    let mut number = 3;
+    while {
+        number += 1;
+        number
+    } != 7
+    {
         println!("{}", number);
     }
-    println!("LISTOFF!!!");
 }
