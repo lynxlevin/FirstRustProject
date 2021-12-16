@@ -1,3 +1,4 @@
+// finished in 64 minutes, written while reading instructions
 struct Game {
     rolls: [u32; 21],
     current_roll: usize,
