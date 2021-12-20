@@ -1,8 +1,10 @@
 // finished in 22 minutes, written without reading instructions
+// added scores in 12 minutes
 
 struct Game {
     rolls: [u32; 21],
     current_roll: usize,
+    scores: [u32; 10],
 }
 
 impl Game {
@@ -10,18 +12,24 @@ impl Game {
         Game {
             rolls: [0; 21],
             current_roll: 0,
+            scores: [0; 10],
         }
     }
 
     fn roll(&mut self, pins: u32) {
         self.rolls[self.current_roll] = pins;
         self.current_roll += 1;
+        self.update_scores();
     }
 
-    fn score(&self) -> u32 {
+    fn score(&mut self) -> u32 {
+        self.scores[9]
+    }
+
+    fn update_scores(&mut self) {
         let mut score = 0;
         let mut roll_index = 0;
-        for _frame in 0..10 {
+        for frame in 0..10 {
             if self.is_strike(roll_index) {
                 score += self.score_for_strike_frame(roll_index);
                 roll_index += 1;
@@ -32,8 +40,8 @@ impl Game {
                 score += self.score_for_normal_frame(roll_index);
                 roll_index += 2;
             }
+            self.scores[frame] = score;
         }
-        score
     }
 
     fn is_spare(&self, roll_index: usize) -> bool {
@@ -83,6 +91,7 @@ mod tests {
         let mut game = Game::new();
         game.roll_many(20, 0);
         assert_eq!(0, game.score());
+        assert_eq!([0; 10], game.scores); // game.score() needs to be called to get correct scores
     }
 
     #[test]
@@ -90,6 +99,7 @@ mod tests {
         let mut game = Game::new();
         game.roll_many(20, 1);
         assert_eq!(20, game.score());
+        assert_eq!([2, 4, 6, 8, 10, 12, 14, 16, 18, 20], game.scores);
     }
 
     #[test]
@@ -99,6 +109,7 @@ mod tests {
         game.roll(5);
         game.roll_many(17, 0);
         assert_eq!(20, game.score());
+        assert_eq!([15, 20, 20, 20, 20, 20, 20, 20, 20, 20], game.scores);
     }
 
     #[test]
@@ -109,6 +120,7 @@ mod tests {
         game.roll(4);
         game.roll_many(17, 0);
         assert_eq!(22, game.score());
+        assert_eq!([16, 22, 22, 22, 22, 22, 22, 22, 22, 22], game.scores);
     }
 
     #[test]
@@ -116,5 +128,6 @@ mod tests {
         let mut game = Game::new();
         game.roll_many(12, 10);
         assert_eq!(300, game.score());
+        assert_eq!([30, 60, 90, 120, 150, 180, 210, 240, 270, 300], game.scores);
     }
 }
